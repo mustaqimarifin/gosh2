@@ -1,0 +1,146 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["views"]
+}
+
+generator zod {
+  provider              = "zod-prisma"
+  output                = "./ZOD"
+  relationModel         = "true"
+  modelSuffix           = "Schema"
+  modelCase             = "camelCase"
+  prismaJsonNullability = "false"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("SQL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @id @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model User {
+  id            String            @id @default(cuid())
+  name          String
+  email         String?           @unique
+  emailVerified DateTime?
+  image         String?           @default("https://emojis.slackmojis.com/emojis/images/1643514738/7421/typingcat.gif?1643514738")
+  level         Level?
+  accounts      Account[]
+  comments      Comment[]
+  reactions     CommentReaction[]
+  hotlines      Hotline[]
+  likes         Like[]
+  sessions      Session[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Post {
+  slug     String    @id
+  count    BigInt?   @default(1)
+  comments Comment[]
+
+  @@index([slug])
+}
+
+model Comment {
+  id        Int               @id @default(autoincrement())
+  /// @zod.max(10000)
+  text      String
+  createdAt DateTime          @default(now())
+  updatedAt DateTime?         @updatedAt
+  userId    String?
+  parentId  Int?
+  slug      String?
+  parent    Comment?          @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   Comment[]         @relation("ParentChild")
+  post      Post?             @relation(fields: [slug], references: [slug], onDelete: Cascade)
+  user      User?             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reactions CommentReaction[]
+  likes     Like[]
+
+  @@index([userId, slug, createdAt])
+}
+
+model Hotline {
+  id        Int               @id @default(autoincrement())
+  text      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  userId    String?
+  user      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+}
+
+model Like {
+  userId    String
+  commentId Int
+  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, commentId])
+}
+
+model Reaction {
+  type      String            @id @unique
+  createdAt DateTime          @default(now())
+  label     String
+  url       String
+  metadata  Json?
+  reactions CommentReaction[]
+}
+
+model CommentReaction {
+  id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now())
+  commentId    Int?
+  userId       String?
+  reactionType String
+  comment      Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  reaction     Reaction @relation(fields: [reactionType], references: [type], onDelete: Cascade)
+  user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, commentId, reactionType])
+}
+
+enum Level {
+  NONE
+  NOOB
+  LORD
+  MANNEQUIN
+  AI
+  ADMIN
+}

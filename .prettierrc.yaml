@@ -1,0 +1,6 @@
+trailingComma: 'es5'
+tabWidth: 2
+semi: false
+singleQuote: true
+plugins:
+  - './node_modules/prettier-plugin-sort-imports/dist/index.js'

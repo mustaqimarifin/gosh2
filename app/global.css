@@ -1,0 +1,332 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --accents-1: #fafafa;
+    --accents-2: #eaeaea;
+
+    --background: 0 0% 100%;
+    --foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 215 20.2% 65.1%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --accents-dark-1: #555;
+    --accents-dark-2: #777;
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+
+    --muted: 223 47% 11%;
+    --muted-foreground: 215.4 16.3% 56.9%;
+
+    --accent: 216 34% 17%;
+    --accent-foreground: 210 40% 98%;
+
+    --popover: 224 71% 4%;
+    --popover-foreground: 215 20.2% 65.1%;
+
+    --border: 216 34% 17%;
+    --input: 216 34% 17%;
+
+    --card: 224 71% 4%;
+    --card-foreground: 213 31% 91%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 1.2%;
+
+    --secondary: 222.2 47.4% 11.2%;
+    --secondary-foreground: 210 40% 98%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 216 34% 17%;
+
+    --radius: 0.5rem;
+  }
+}
+
+::selection {
+  background-color: #47a3f3;
+  color: #fefefe;
+}
+
+@layer components {
+  .focus-ring-input {
+    @apply focus:outline-none focus:ring-indigo-500 focus:border-indigo-500;
+  }
+
+  .btn {
+    @apply focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-green-200;
+  }
+
+  .focus-ring {
+    @apply focus:border-transparent focus:outline-none focus:ring-red-400 focus:ring-1 focus:ring-opacity-75 focus:ring-offset-1 transition duration-300 ease-in-out rounded-sm;
+  }
+
+  .focus-within-ring {
+    @apply focus-within:outline-none focus-within:ring-red-200 focus-within:ring-1 focus-within:ring-opacity-75 focus-within:ring-offset-2 transition duration-300 ease-in-out rounded-sm;
+  }
+}
+
+@layer utilities {
+  .skeleton {
+    background-image: linear-gradient(
+      270deg,
+      var(--accents-1),
+      var(--accents-2),
+      var(--accents-2),
+      var(--accents-1)
+    );
+    background-size: 400% 100%;
+    animation: loading 8s ease-in-out infinite;
+  }
+
+  .comment-grid {
+    grid-template-columns: fit-content(1.75rem) minmax(0, 1fr);
+  }
+}
+
+@layer utilities {
+  .skeleton-dark {
+    background-image: linear-gradient(
+      270deg,
+      var(--accents-dark-1),
+      var(--accents-dark-2),
+      var(--accents-dark-2),
+      var(--accents-dark-1)
+    );
+    background-size: 400% 100%;
+    animation: loading 8s ease-in-out infinite;
+  }
+}
+
+html {
+  min-width: 360px;
+}
+
+.prose .anchor {
+  @apply absolute invisible no-underline;
+
+  margin-left: -1em;
+  padding-right: 0.5em;
+  width: 80%;
+  max-width: 700px;
+  cursor: pointer;
+}
+
+.anchor:hover {
+  @apply visible;
+}
+
+.prose a {
+  @apply transition-all decoration-neutral-400 dark:decoration-neutral-600 underline-offset-2 decoration-[0.1em];
+}
+
+.prose .anchor:after {
+  @apply text-neutral-300 dark:text-neutral-700;
+  content: '#';
+}
+
+.prose *:hover > .anchor {
+  @apply visible;
+}
+
+/* .prose pre {
+  @apply border ;
+}
+ */
+.prose code {
+  @apply text-neutral-800 dark:text-neutral-200 px-1 py-0.5 border border-neutral-100 dark:border-neutral-800 rounded-lg bg-neutral-100 dark:bg-neutral-900;
+}
+
+.prose pre code {
+  @apply text-neutral-800 dark:text-neutral-200 p-0;
+  border: initial;
+  line-height: 1.5;
+}
+
+.prose img {
+  /* Don't apply styles to next/image */
+  @apply m-0;
+}
+
+.prose h2,
+h3,
+h4 {
+  @apply font-semibold;
+}
+
+.prose > :first-child {
+  /* Override removing top margin, causing layout shift */
+  margin-top: 1.25em !important;
+  margin-bottom: 1.25em !important;
+}
+
+code[class*='language-'],
+pre[class*='language-'] {
+  @apply text-neutral-50;
+}
+
+pre::-webkit-scrollbar {
+  display: none;
+}
+
+pre {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Remove Safari input shadow on mobile */
+input[type='text'],
+input[type='email'] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.prose .tweet a {
+  text-decoration: inherit;
+  font-weight: inherit;
+}
+
+table {
+  display: block;
+  max-width: fit-content;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.prose .callout > p {
+  margin: 0 !important;
+}
+
+[data-rehype-pretty-code-fragment] code {
+  @apply grid min-w-full break-words rounded-none border-0 bg-transparent p-0 text-sm text-black;
+  counter-reset: line;
+  box-decoration-break: clone;
+}
+[data-rehype-pretty-code-fragment] .line {
+  @apply py-1;
+}
+[data-rehype-pretty-code-fragment] [data-line-numbers] > .line::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 1rem;
+  margin-right: 1rem;
+  text-align: right;
+  color: gray;
+}
+[data-rehype-pretty-code-fragment] .line--highlighted {
+  @apply bg-slate-500 bg-opacity-10;
+}
+[data-rehype-pretty-code-fragment] .line-highlighted span {
+  @apply relative;
+}
+[data-rehype-pretty-code-fragment] .word--highlighted {
+  @apply rounded-md bg-slate-500 bg-opacity-10 p-1;
+}
+[data-rehype-pretty-code-title] {
+  @apply px-4 py-3 font-mono text-xs font-medium border rounded-t-lg text-neutral-200 border-[#333333] bg-[#1c1c1c];
+}
+[data-rehype-pretty-code-title] + pre {
+  @apply mt-0 rounded-t-none border-t-0;
+}
+
+.comments {
+  @apply mt-5;
+}
+
+.comments-container {
+  @apply mt-10;
+}
+
+.comment-form-title {
+  @apply text-base;
+}
+
+.comment-form-textarea {
+  @apply w-full h-20 mb-2 mt-2 border border-solid;
+}
+
+.comment-form-button {
+  @apply py-3 px-2 bg-indigo-600 text-white shadow-sm border border-solid rounded-lg;
+}
+
+.comment-form-button:hover:enabled {
+  @apply cursor-pointer bg-purple-400;
+}
+
+.comment-form-button:disabled {
+  @apply cursor-default;
+}
+
+.comment-form-cancel-button {
+  @apply ml-3;
+}
+
+.comment-image-container {
+  @apply mr-3;
+}
+
+.comment-image-container img {
+  @apply rounded-full;
+}
+
+.comment-right-part {
+  @apply w-full;
+}
+
+.comment-content {
+  @apply flex;
+}
+
+.comment-author {
+  @apply mr-2 text-sm;
+}
+
+.comment-text {
+  @apply text-sm;
+}
+
+.comment-actions {
+  @apply cursor-pointer flex text-xs text-gray-600 mt-2;
+}
+
+.comment-action {
+  @apply mr-2;
+}
+
+.replies {
+  @apply mt-5;
+}
